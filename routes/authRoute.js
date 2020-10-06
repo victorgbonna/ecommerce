@@ -54,25 +54,69 @@ router.post('/register', guestMiddleware, async(req,res)=>{
         })
     }
 })
-router.get('/login', guestMiddleware, (req,res)=>{
-    res.locals.message={
-        type:'error',
-        body:'Something went wrong'
-    }
+router.get('/login', guestMiddleware, flasherMiddleware,(req,res)=>{
     return res.render('login')
-})
 
-router.post('/login', guestMiddleware, passport.authenticate('local', {successRedirect:'/',
-failureRedirect:'/login',
-failureFlash: false}), (req,res)=>{
-    return res.render('login', {
-        message: {
-        type: 'success',
-        body: 'login success'
-    }
-    })
 })
- 
+// app.get('/login', function(req, res, next) {
+//     passport.authenticate('local', function(err, user, info) {
+//       if (err) { return next(err); }
+//       if (!user) { return res.redirect('/login'); }
+//       req.logIn(user, function(err) {
+//         if (err) { return next(err); }
+//         return res.redirect('/users/' + user.username);
+//       });
+//     })(req, res, next);
+//   });
+
+
+router.post('/login', guestMiddleware, (req,res, next) =>{
+    passport.authenticate('local',(err,user,info)=>{
+        if(err){
+            console.log('ther ean error in login')
+            console.error('Err: ',err)
+            req.session.flashData={
+                message:{ 
+                    type: 'error',
+                    body: 'Login failed'
+                }
+            }   
+            return res.redirect('/login')
+        }
+        if (!user){
+            console.log('no user on login')
+            req.session.flashData={
+                message:{ 
+                    type: 'error',
+                    body: info.message
+                }
+            }   
+            return res.redirect('/login')
+        } 
+        req.login(user,(err)=>{
+            if(err){
+                console.error('Err: ',err)
+                req.session.flashData={
+                    message:{ 
+                        type: 'error',
+                        body: 'Login Failed'
+                    }
+                } 
+            }
+            return res.redirect('/homepage') 
+        })
+    })(req,res,next)
+})
+// passport.authenticate('local', {successRedirect:'/',
+// failureRedirect:'/login',
+// failureFlash: false}), (req,res)=>{
+//     return res.render('login', {
+//         message: {
+//         type: 'success',
+//         body: 'login success'
+//     }
+//     })
+// })
 // logs out the user
 router.get('/logout', authMiddleware,(req,res) =>{
     req.logout()

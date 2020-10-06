@@ -11,30 +11,30 @@ passport.use(new localStrategy({
             const user= await User.findOne({email})
             if(!user) {
                 console.log('no user')
-                done(null, false)                
+                return done(null, false, {message: "Incorrect Email"})                
             }
 
             if ( await user.checkPassword(password)) return done(null, user)
             console.log('no password')
-            done(null, false)
+            return done(null, false, {message: "Incorrect Password"})
         }
         catch(e){
-            done(e)
+            return done(e)
         }
     }
 ))
 
 passport.serializeUser((user,done)=>{
-    done(null,user._id)
+    return done(null,user._id)
 })
 
 passport.deserializeUser(async (_id,done)=>{
     try{
         const user= await User.findOne({_id}) 
-        done(null,user)
+        return done(null,user)
     }
     catch(e){
-        done(e)
+        return done(e)
     }
 })
 
