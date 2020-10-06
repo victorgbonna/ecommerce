@@ -8,10 +8,10 @@ const userSchema=mongoose.Schema({
         maxlength:[30, 'Name cannot be greater than 30 characters'],
         minlength:[2, 'Name cannot be lesser than 2 characters']
     },
-    name: {
+    email: {
         type:String,
         required:[true, 'Email is required'],
-        maxlength:[120, 'Email cannot be greater than 30 characters'],
+        maxlength:[120, 'Email cannot be greater than 120 characters'],
         minlength:[2, 'Email cannot be lesser than 2 characters'],
         index:true
     },
