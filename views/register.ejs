@@ -5,6 +5,9 @@
     <%-include('includes/nav'); %> 
     <div class="container">
         <h2>Registration</h2>
+        <% if (message) { %>
+            <h2><%= message %></h2>
+        <% } %>
         <form method="POST" action="/register">
             <div class="form-group">
                 <label for="name">Name <sup class="text-danger">*</sup></label>
