@@ -52,6 +52,9 @@ app.get('/homepage', authMiddleware,(req,res)=>{
     res.send('welcome '+req.user.name)
 })
 
+app.use((req,res,next)=>{
+    res.status(404).render("404")
+})
 
 app.listen(3000,()=>{
     console.log('Server running on port 3000');
