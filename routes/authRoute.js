@@ -34,7 +34,7 @@ router.post('/register', guestMiddleware, async(req,res)=>{
         }
         // return res.send(result)
         const user=await addUser(req.body)
-        console.log('password -'+ req.body.password)
+        // console.log('password -'+ req.body.password)
         return res.render('register', {message:{
             type: 'success',
             body: 'Registration success'
@@ -42,7 +42,7 @@ router.post('/register', guestMiddleware, async(req,res)=>{
         formData:req.body
     })
     } catch (e) {
-        console.error(e)
+        // console.error(e)
         // return res.send(mongooseErrorFormatter(e))
         return res.status(400).render('register', {
             message:{
@@ -73,7 +73,7 @@ router.get('/login', guestMiddleware, flasherMiddleware,(req,res)=>{
 router.post('/login', guestMiddleware, (req,res, next) =>{
     passport.authenticate('local',(err,user,info)=>{
         if(err){
-            console.log('ther ean error in login')
+            // console.log('ther ean error in login')
             console.error('Err: ',err)
             req.session.flashData={
                 message:{ 
@@ -84,7 +84,7 @@ router.post('/login', guestMiddleware, (req,res, next) =>{
             return res.redirect('/login')
         }
         if (!user){
-            console.log('no user on login')
+            // console.log('no user on login')
             req.session.flashData={
                 message:{ 
                     type: 'error',

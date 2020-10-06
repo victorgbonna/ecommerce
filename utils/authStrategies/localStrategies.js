@@ -10,12 +10,12 @@ passport.use(new localStrategy({
         try{
             const user= await User.findOne({email})
             if(!user) {
-                console.log('no user')
+                // console.log('no user')
                 return done(null, false, {message: "Incorrect Email"})                
             }
 
             if ( await user.checkPassword(password)) return done(null, user)
-            console.log('no password')
+            // console.log('no password')
             return done(null, false, {message: "Incorrect Password"})
         }
         catch(e){
