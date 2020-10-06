@@ -1,6 +1,7 @@
 const express= require('express')
 const router=express.Router()
 const addUser=require('../modules/users/service/userService')
+const registerSchema=require('../modules/users/validation/regVal')
 
 
 router.get('/register',(req, res)=>{
@@ -9,6 +10,13 @@ router.get('/register',(req, res)=>{
 
 router.post('/register', async(req,res)=>{
     try {
+        const {error}= registerSchema.validate(req.body,{
+            abortEarly: false
+        })
+        if (error){
+            return res.render('register', {message:'Validation Errors'})
+        }
+        // return res.send(result)
         const user=await addUser(req.body)
         return res.render('register', {message:"Registration Sucessful"})
     } catch (e) {
