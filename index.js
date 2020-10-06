@@ -3,6 +3,8 @@ const session=require('express-session')
 const bodyParser= require('body-parser')
 const authRoute= require('./routes/authRoute')
 require('./utils/authStrategies/localStrategies')
+const MongoStore= require('connect-mongo')(session)
+const mongooseConnection=require('./utils/db')
 // const User= require('./modules/users/models/user')
 const passport = require('passport')
 
@@ -17,7 +19,8 @@ app.use(session({
     secret: '642a3f8e31251692cd18d68281314984318abd3b',
     resave: false,
     saveUninitialized:true,
-    cookie:{secure:false}
+    cookie:{secure:false},
+    store: new MongoStore({mongooseConnection})
 }))
 
 app.use(passport.initialize())
