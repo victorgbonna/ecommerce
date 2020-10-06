@@ -15,6 +15,9 @@ const app=express()
 app.use(bodyParser.urlencoded({extended:false}))
 app.set('view engine', 'ejs')
 
+app.locals.message={}
+app.locals.formData={}
+app.locals.errors={}
 // app.set('trust proxy',1)
 app.use(session({
     secret: '642a3f8e31251692cd18d68281314984318abd3b',
@@ -27,6 +30,7 @@ app.use(session({
 
 app.use(passport.initialize())
 app.use(passport.session())
+// console.log(app.locals)
 
 app.use('/', authRoute)
 
