@@ -5,7 +5,7 @@ const app=require('../index')
 chai.use(chaiHttp)
 chai.should()
 describe('Make sure it is 200', ()=>{
-    it('should return 200', done =>{
+    it('should return a page', done =>{
         chai.request(app)
             .get('/')
             .end((err, res)=>{
