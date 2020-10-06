@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express= require('express')
 const session=require('express-session')
 const bodyParser= require('body-parser')
@@ -9,7 +10,7 @@ const mongooseConnection=require('./utils/db')
 // const User= require('./modules/users/models/user')
 const passport = require('passport')
 const authMiddleware = require('./middleware/authMiddleware')
-
+const config= require('./utils/config')
 require('./utils/db')
 
 const app=express()
@@ -56,8 +57,8 @@ app.use((req,res,next)=>{
     res.status(404).render("404")
 })
 
-app.listen(3000,()=>{
-    console.log('Server running on port 3000');
+app.listen(config.port,()=>{
+    console.log(`Server running on port ${config.port}`);
 })
 
 module.exports= app
