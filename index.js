@@ -7,6 +7,7 @@ const MongoStore= require('connect-mongo')(session)
 const mongooseConnection=require('./utils/db')
 // const User= require('./modules/users/models/user')
 const passport = require('passport')
+const authMiddleware = require('./middleware/authMiddleware')
 
 require('./utils/db')
 
@@ -22,6 +23,7 @@ app.use(session({
     cookie:{secure:false},
     store: new MongoStore({mongooseConnection})
 }))
+
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -39,6 +41,10 @@ app.get('/', (req,res)=>{
     // req.session.views=(req.session.views || 0) + 1
     console.log(req.user)
     return res.render('index')
+})
+
+app.get('/homepage', authMiddleware,(req,res)=>{
+    res.send('welcome '+req.user.name)
 })
 
 

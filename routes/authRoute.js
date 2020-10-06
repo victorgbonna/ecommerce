@@ -4,12 +4,14 @@ const addUser=require('../modules/users/service/userService')
 const registerSchema=require('../modules/users/validation/regVal')
 const {joiErrorFormatter, mongooseErrorFormatter} = require('../utils/validationFormatter')
 const passport= require('passport')
+const guestMiddleware = require('../middleware/guestMiddleware')
+const authMiddleware = require('../middleware/authMiddleware')
 
-router.get('/register',(req, res)=>{
+router.get('/register',guestMiddleware,(req, res)=>{
     return res.render('register', {message: {},errors: {}, formData:{}})
 })
 
-router.post('/register', async(req,res)=>{
+router.post('/register', guestMiddleware, async(req,res)=>{
     try {
         const {error}= registerSchema.validate(req.body,{
             abortEarly: false
@@ -46,13 +48,12 @@ router.post('/register', async(req,res)=>{
         })
     }
 })
-
-router.get('/login', (req,res)=>{
+router.get('/login', guestMiddleware, (req,res)=>{
     return res.render('login', {message: {},errors: {}, formData:{}})
 })
 
-router.post('/login',passport.authenticate('local', {successRedirect:'/loginsucess',
-failureRedirect:'/loginfailed',
+router.post('/login', guestMiddleware, passport.authenticate('local', {successRedirect:'/',
+failureRedirect:'/login',
 failureFlash: false}), (req,res)=>{
     return res.render('login', {message: {
         type: 'success',
