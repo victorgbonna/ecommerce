@@ -15,6 +15,7 @@ require('./utils/db')
 
 const app=express()
 app.use(bodyParser.urlencoded({extended:false}))
+app.use(express.static(__dirname+'/public'))
 app.set('view engine', 'ejs')
 
 app.locals.message={}
@@ -50,7 +51,7 @@ app.get('/', (req,res)=>{
 })
 
 app.get('/homepage', authMiddleware,(req,res)=>{
-    res.send('welcome '+req.user.name)
+    res.render('dashboard')
 })
 
 app.use((req,res,next)=>{
