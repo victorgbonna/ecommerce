@@ -4,14 +4,18 @@ const localStrategy=require('passport-local').Strategy
 
 
 passport.use(new localStrategy({
-    usernameField:'email'
+    usernameField:'email',
 },
     async(email,password, done)=>{
         try{
             const user= await User.findOne({email})
-            if(!user) done(null, false)
+            if(!user) {
+                console.log('no user')
+                done(null, false)                
+            }
 
             if ( await user.checkPassword(password)) return done(null, user)
+            console.log('no password')
             done(null, false)
         }
         catch(e){

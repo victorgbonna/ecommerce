@@ -5,6 +5,8 @@ const registerSchema=require('../validation/regVal')
 const {joiErrorFormatter, mongooseErrorFormatter} = require('../utils/validationFormatter')
 const passport= require('passport')
 const guestMiddleware = require('../middleware/guestMiddleware')
+const authMiddleware = require('../middleware/authMiddleware')
+
 // const authMiddleware = require('../middleware/authMiddleware')
 
 router.get('/register',guestMiddleware,(req, res)=>{
@@ -29,6 +31,7 @@ router.post('/register', guestMiddleware, async(req,res)=>{
         }
         // return res.send(result)
         const user=await addUser(req.body)
+        console.log('password -'+ req.body.password)
         return res.render('register', {message:{
             type: 'success',
             body: 'Registration success'
@@ -53,7 +56,7 @@ router.get('/login', guestMiddleware, (req,res)=>{
 })
 
 router.post('/login', guestMiddleware, passport.authenticate('local', {successRedirect:'/',
-failureRedirect:'/login',
+failureRedirect:'/login-failed',
 failureFlash: false}), (req,res)=>{
     return res.render('login', {
         message: {
@@ -62,5 +65,10 @@ failureFlash: false}), (req,res)=>{
     }
     })
 })
-
+ 
+// logs out the user
+router.get('/logout', authMiddleware,(req,res) =>{
+    req.logout()
+    res.redirect('/')
+})
 module.exports=router
