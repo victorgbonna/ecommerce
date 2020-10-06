@@ -2,7 +2,10 @@ const express= require('express')
 const session=require('express-session')
 const bodyParser= require('body-parser')
 const authRoute= require('./routes/authRoute')
-const User= require('./modules/users/models/user')
+require('./utils/authStrategies/localStrategies')
+// const User= require('./modules/users/models/user')
+const passport = require('passport')
+
 require('./utils/db')
 
 const app=express()
@@ -17,6 +20,9 @@ app.use(session({
     cookie:{secure:false}
 }))
 
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use('/', authRoute)
 
 app.get('/', (req,res)=>{
@@ -27,8 +33,8 @@ app.get('/', (req,res)=>{
     // else{   
     //     console.log('Name', req.session.name)
     // }
-    req.session.views=(req.session.views || 0) + 1
-    console.log(req.session.views)
+    // req.session.views=(req.session.views || 0) + 1
+    console.log(req.user)
     return res.render('index')
 })
 
