@@ -1,10 +1,8 @@
 const express= require('express')
+require('./utils/db')
 const app=express()
 
-
 app.set('view engine', 'ejs')
-
-
 
 app.get('/', (req,res)=>{
     return res.render('index')
