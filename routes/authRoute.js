@@ -6,10 +6,11 @@ const {joiErrorFormatter, mongooseErrorFormatter} = require('../utils/validation
 const passport= require('passport')
 const guestMiddleware = require('../middleware/guestMiddleware')
 const authMiddleware = require('../middleware/authMiddleware')
+const flasherMiddleware = require('../middleware/flasherMiddleware')
 
 // const authMiddleware = require('../middleware/authMiddleware')
 
-router.get('/register',guestMiddleware,(req, res)=>{
+router.get('/register',guestMiddleware, flasherMiddleware,(req, res)=>{
     return res.render('register')
 })
 
@@ -19,15 +20,17 @@ router.post('/register', guestMiddleware, async(req,res)=>{
             abortEarly: false
         })
         if (error){
-            // return res.send(joiErrorFormatter(error))
-            return res.render('register', {
+            req.session.flashData={
                 message:{ 
                     type: 'error',
                     body: 'Validation Errors'
                 },
                 errors: joiErrorFormatter(error),
                 formData:req.body
-            })
+            }
+            // return res.send(joiErrorFormatter(error))
+            return res.redirect('/register')
+            // return res.render('register')
         }
         // return res.send(result)
         const user=await addUser(req.body)
@@ -52,6 +55,10 @@ router.post('/register', guestMiddleware, async(req,res)=>{
     }
 })
 router.get('/login', guestMiddleware, (req,res)=>{
+    res.locals.message={
+        type:'error',
+        body:'Something went wrong'
+    }
     return res.render('login')
 })
 

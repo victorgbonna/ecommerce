@@ -1,6 +1,7 @@
 const express= require('express')
 const session=require('express-session')
 const bodyParser= require('body-parser')
+const logger= require('morgan')
 const authRoute= require('./routes/authRoute')
 require('./utils/authStrategies/localStrategies')
 const MongoStore= require('connect-mongo')(session)
@@ -27,7 +28,7 @@ app.use(session({
     store: new MongoStore({mongooseConnection})
 }))
 
-
+app.use(logger('dev'))
 app.use(passport.initialize())
 app.use(passport.session())
 // console.log(app.locals)
