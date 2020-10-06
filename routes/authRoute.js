@@ -62,7 +62,7 @@ router.get('/login', guestMiddleware, (req,res)=>{
     return res.render('login')
 })
 
-router.post('/', guestMiddleware, passport.authenticate('local', {successRedirect:'/',
+router.post('/login', guestMiddleware, passport.authenticate('local', {successRedirect:'/',
 failureRedirect:'/login',
 failureFlash: false}), (req,res)=>{
     return res.render('login', {
