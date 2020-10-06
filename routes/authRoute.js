@@ -1,11 +1,11 @@
 const express= require('express')
 const router=express.Router()
 const addUser=require('../modules/users/service/userService')
-const registerSchema=require('../modules/users/validation/regVal')
+const registerSchema=require('../validation/regVal')
 const {joiErrorFormatter, mongooseErrorFormatter} = require('../utils/validationFormatter')
 const passport= require('passport')
 const guestMiddleware = require('../middleware/guestMiddleware')
-const authMiddleware = require('../middleware/authMiddleware')
+// const authMiddleware = require('../middleware/authMiddleware')
 
 router.get('/register',guestMiddleware,(req, res)=>{
     return res.render('register', {message: {},errors: {}, formData:{}})
