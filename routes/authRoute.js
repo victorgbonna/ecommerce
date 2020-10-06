@@ -119,7 +119,13 @@ router.post('/login', guestMiddleware, (req,res, next) =>{
 // })
 // logs out the user
 router.get('/logout', authMiddleware,(req,res) =>{
+    req.session.flashData={
+        message:{ 
+            type: 'success',
+            body: 'Logout succesfully'
+        }
+    }
     req.logout()
-    res.redirect('/')
+    res.redirect('/login')
 })
 module.exports=router
